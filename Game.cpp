@@ -190,6 +190,7 @@ void Game::displayDashesWithGuesses()
     {
         for (char c : currentWord)
         {
+            if (c == ' ') continue;
             if (correctGuesses.find(tolower(c)) == string::npos)
                 return false;
         }
