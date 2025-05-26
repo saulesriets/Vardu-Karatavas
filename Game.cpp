@@ -196,3 +196,12 @@ void Game::displayDashesWithGuesses()
         }
         return true;
     }
+
+//tabulai pagaidu
+bool Game::getWinStatus() const {
+    return wordGuessed;
+}
+
+int Game::getScore() const {
+    return static_cast<int>(finalScore);
+}
