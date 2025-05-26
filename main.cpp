@@ -210,8 +210,8 @@ int main()
                             game.play();
 
                             //rezultātu saglabāšana un atjaunošana
-                            bool uzvareja = spele.getWinStatus(); //pievieno game klasei
-                            int punkti = spele.getScore(); //pievieno game klasei
+                            bool uzvareja = game.getWinStatus(); //pievieno game klasei
+                            int punkti = game.getScore(); //pievieno game klasei
                             
                             vector<SpeletajuRezultati> rezultati = nolasitRezultatus("rezultati.json");
                             atjaunotRezultatu(rezultati, speletajs.lietotajvards, uzvareja, punkti);
