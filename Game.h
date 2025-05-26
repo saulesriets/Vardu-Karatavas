@@ -32,6 +32,10 @@ public:
     int getTimeBonus() const;
     double getFinalScore() const;
 
+     // vienkāršotās rezultātu tabulas funkcijas PAGAIDĀM
+    bool getWinStatus() const;
+    int getScore() const;
+
 private:
     void displayDashes();
     void displayDashesWithGuesses();
