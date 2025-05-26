@@ -5,20 +5,24 @@
 #include <vector>
 #include <nlohmann/json.hpp>
 
+// Struktūra, lai glabātu spēlētāja rezultātus
 struct SpeletajuRezultati {
-    std::string username;
-    int wins = 0;
-    int losses = 0;
-    int totalPoints = 0;
+    std::string lietotajvards;
+    int uzvaras = 0;
+    int zaudejumi = 0;
+    int punktiKopa = 0;
 };
 
-// JSON 
-void to_json(nlohmann::json& j, const SpeletajuRezultati& p);
-void from_json(const nlohmann::json& j, SpeletajuRezultati& p);
+// JSON konvertēšanas funkcijas
+void to_json(nlohmann::json& j, const SpeletajuRezultati& s);
+void from_json(const nlohmann::json& j, SpeletajuRezultati& s);
 
-void saveRankings(const std::vector<SpeletajuRezultati>& rankings, const std::string& filename);
-std::vector<SpeletajuRezultati> loadRankings(const std::string& filename);
-void updateSpeletajuRezultati(std::vector<SpeletajuRezultati>& rankings, const std::string& username, bool won, int points);
-void displayRankings(const std::vector<SpeletajuRezultati>& rankings);
+// Rezultātu failu darbības
+void saglabatRezultatus(const std::vector<SpeletajuRezultati>& rezultati, const std::string& fails);
+std::vector<SpeletajuRezultati> nolasitRezultatus(const std::string& fails);
+
+// Rezultātu apstrāde
+void atjaunotRezultatu(std::vector<SpeletajuRezultati>& rezultati, const std::string& lietotajvards, bool uzvareja, int ieguutiePunkti);
+void paraditRezultatus(const std::vector<SpeletajuRezultati>& rezultati);
 
 #endif // SPELETAJU_REZULTATI_HPP
