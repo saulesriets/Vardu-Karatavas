@@ -1,5 +1,6 @@
 #include "json.hpp"
 #include "Game.h"
+#include "speletaju_rezultati.hpp" //tabulai
 #include <iostream>
 #include <string>
 #include <vector>
@@ -207,6 +208,18 @@ int main()
                             }
 
                             game.play();
+
+                            //rezultātu saglabāšana un atjaunošana
+                            bool uzvareja = spele.getWinStatus(); //pievieno game klasei
+                            int punkti = spele.getScore(); //pievieno game klasei
+                            
+                            vector<SpeletajuRezultati> rezultati = nolasitRezultatus("rezultati.json");
+                            atjaunotRezultatu(rezultati, speletajs.lietotajvards, uzvareja, punkti);
+                            saglabatRezultatus(rezultati, "rezultati.json");
+                            
+                            //parāda rezultātu
+                            paraditRezultatus(rezultati);
+                            
                         }
                         catch (exception &e)
                         {
