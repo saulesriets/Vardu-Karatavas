@@ -5,61 +5,62 @@
 
 using json = nlohmann::json;
 
-void to_json(json& j, const SpeletajuRezultati& p) {
-    j = json{{"username", p.username}, {"wins", p.wins}, {"losses", p.losses}, {"totalPoints", p.totalPoints}};
+void to_json(json& j, const SpeletajuRezultati& s) {
+    j = json{{"lietotajvards", s.lietotajvards}, {"uzvaras", s.uzvaras}, {"zaudejumi", s.zaudejumi}, {"punktiKopa", s.punktiKopa}};
 }
 
-void from_json(const json& j, SpeletajuRezultati& p) {
-    j.at("username").get_to(p.username);
-    j.at("wins").get_to(p.wins);
-    j.at("losses").get_to(p.losses);
-    j.at("totalPoints").get_to(p.totalPoints);
+void from_json(const json& j, SpeletajuRezultati& s) {
+    j.at("lietotajvards").get_to(s.lietotajvards);
+    j.at("uzvaras").get_to(s.uzvaras);
+    j.at("zaudejumi").get_to(s.zaudejumi);
+    j.at("punktiKopa").get_to(s.punktiKopa);
 }
 
-void saveRankings(const std::vector<SpeletajuRezultati>& rankings, const std::string& filename) {
-    std::ofstream file(filename);
-    if (file.is_open()) {
-        json j = rankings;
-        file << j.dump(4);
-        file.close();
+void saglabatRezultatus(const std::vector<SpeletajuRezultati>& rezultati, const std::string& fails) {
+    std::ofstream izvade(fails);
+    if (izvade.is_open()) {
+        json j = rezultati;
+        izvade << j.dump(4);
+        izvade.close();
     }
 }
 
-std::vector<SpeletajuRezultati> loadRankings(const std::string& filename) {
-    std::ifstream file(filename);
-    std::vector<SpeletajuRezultati> rankings;
-    if (file.is_open()) {
+std::vector<SpeletajuRezultati> nolasitRezultatus(const std::string& fails) {
+    std::ifstream ievade(fails);
+    std::vector<SpeletajuRezultati> rezultati;
+    if (ievade.is_open()) {
         json j;
-        file >> j;
-        rankings = j.get<std::vector<SpeletajuRezultati>>();
-        file.close();
+        ievade >> j;
+        rezultati = j.get<std::vector<SpeletajuRezultati>>();
+        ievade.close();
     }
-    return rankings;
+    return rezultati;
 }
 
-void updateSpeletajuRezultati(std::vector<SpeletajuRezultati>& rankings, const std::string& username, bool won, int points) {
-    auto it = std::find_if(rankings.begin(), rankings.end(), [&](const SpeletajuRezultati& p) {
-        return p.username == username;
+void atjaunotRezultatu(std::vector<SpeletajuRezultati>& rezultati, const std::string& lietotajvards, bool uzvareja, int ieguutiePunkti) {
+    auto atrasts = std::find_if(rezultati.begin(), rezultati.end(), [&](const SpeletajuRezultati& s) {
+        return s.lietotajvards == lietotajvards;
     });
 
-    if (it != rankings.end()) {
-        if (won) it->wins++;
-        else it->losses++;
-        it->totalPoints += points;
+    if (atrasts != rezultati.end()) {
+        if (uzvareja) atrasts->uzvaras++;
+        else atrasts->zaudejumi++;
+        atrasts->punktiKopa += ieguutiePunkti;
     } else {
-        rankings.push_back({username, won ? 1 : 0, won ? 0 : 1, points});
+        rezultati.push_back({lietotajvards, uzvareja ? 1 : 0, uzvareja ? 0 : 1, ieguutiePunkti});
     }
 }
 
-void displayRankings(const std::vector<SpeletajuRezultati>& rankings) {
-    std::vector<SpeletajuRezultati> sorted = rankings;
-    std::sort(sorted.begin(), sorted.end(), [](const SpeletajuRezultati& a, const SpeletajuRezultati& b) {
-        return a.totalPoints > b.totalPoints;
+void paraditRezultatus(const std::vector<SpeletajuRezultati>& rezultati) {
+    std::vector<SpeletajuRezultati> sakartoti = rezultati;
+    std::sort(sakartoti.begin(), sakartoti.end(), [](const SpeletajuRezultati& a, const SpeletajuRezultati& b) {
+        return a.punktiKopa > b.punktiKopa;
     });
 
-    std::cout << "Ranku Tabula" << std::endl;
-    for (const auto& p : sorted) {
-        std::cout << p.username << " - Uzvaras: " << p.wins << ", Zaudējumi: " << p.losses
-                  << ", Punkti: " << p.totalPoints << std::endl;
+    std::cout << "===== Rangu Tabula =====" << std::endl;
+    for (const auto& s : sakartoti) {
+        std::cout << s.lietotajvards << " - Uzvaras: " << s.uzvaras
+                  << ", Zaudējumi: " << s.zaudejumi
+                  << ", Punkti: " << s.punktiKopa << std::endl;
     }
 }
