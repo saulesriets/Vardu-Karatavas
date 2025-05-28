@@ -11,7 +11,9 @@
                 "src/main.cpp",
                 "src/Game.cpp",
                 "src/redactor.cpp",
+                "src/speletajs.cpp",
                 "src/Category.cpp",
+                "src/speletaju_rezultati.cpp",
                 "-o",
                 "app.exe"
             ],

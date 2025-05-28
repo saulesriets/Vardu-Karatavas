@@ -1,5 +1,6 @@
 #include "json.hpp"
 #include "Game.h"
+#include "speletajs.h"
 #include "redactor.h"
 #include <iostream>
 #include <string>
@@ -10,76 +11,55 @@
 #include <fstream>
 using json = nlohmann::json;
 using namespace std;
-
-struct User
-{
-    string lietotajvards;
-    char loma;
-    bool LoggedIn;
-};
+#include "user.h"
 
 User Login();
 void Register();
 string virknesParbaude(string zinojums);
 
-User Login()
-{
+User Login() {
     string lietotajs, parole;
     bool LoggedIn = false;
-    while (!LoggedIn)
-    {
+    while (!LoggedIn) {
         lietotajs = virknesParbaude("Ievadiet lietotajvardu: ");
         ifstream Fails("Lietotaji.txt");
-        if (!Fails)
-        {
+        if (!Fails) {
             cout << "Nevar atvērt failu!" << endl;
             break;
         }
         string failaLietotajs, failaParole, failasr;
         bool IrLietot = false, IrParole = false;
-        while (Fails >> failaLietotajs >> failaParole >> failasr)
-        {
-            if (lietotajs == failaLietotajs)
-            {
+        while (Fails >> failaLietotajs >> failaParole >> failasr) {
+            if (lietotajs == failaLietotajs) {
                 IrLietot = true;
                 parole = virknesParbaude("Ievadiet paroli: ");
-
-                if (parole == failaParole)
-                {
+                if (parole == failaParole) {
                     IrParole = true;
                 }
                 break;
             }
         }
         Fails.close();
-        if (!IrLietot)
-        {
+        if (!IrLietot) {
             cout << "Šāds lietotājs neeksistē. Mēģini vēlreiz vai beidz (y/n)? ";
-        }
-        else if (!IrParole)
-        {
+        } else if (!IrParole) {
             cout << "Nepareiza parole. Mēģini vēlreiz vai beidz (y/n)? ";
-        }
-        else
-        {
+        } else {
             cout << "Veiksmīga pieteikšanās! Sveiks, " << lietotajs << "!" << endl;
             return User{lietotajs, failasr[0], true};
         }
 
         char beigt;
         cin >> beigt;
-        if (beigt == 'n' || beigt == 'N')
-        {
+        if (beigt == 'n' || beigt == 'N') {
             cout << "Iziešana no sistēmas." << endl;
             return User{"", ' ', false};
-            break;
         }
     }
     return User{"", ' ', false};
 }
 
-void Register()
-{
+void Register() {
     string lietotajs, parole;
     char rs;
 
@@ -88,16 +68,14 @@ void Register()
     cout << "Spēlētājs[s] vai Redaktors[r]: ";
     cin >> rs;
     rs = tolower(rs);
-    while (rs != 's' && rs != 'r')
-    {
+    while (rs != 's' && rs != 'r') {
         cout << "Spēlētājs[s] vai Redaktors[r]: ";
         cin >> rs;
         rs = tolower(rs);
     }
 
     ofstream Fails("Lietotaji.txt", ios::app);
-    if (!Fails)
-    {
+    if (!Fails) {
         cout << "Nevar atvērt failu!\n";
         return;
     }
@@ -109,207 +87,64 @@ void Register()
     cout << "Lietotājs veiksmīgi reģistrēts!" << endl;
 }
 
-string virknesParbaude(string zinojums)
-{
+string virknesParbaude(string zinojums) {
     string virkne;
-    do
-    {
+    do {
         cout << zinojums;
         if (cin.peek() == '\n') cin.ignore();
         getline(cin, virkne);
-        if (virkne.empty())
-            continue;
-
+        if (virkne.empty()) continue;
         virkne = regex_replace(virkne, regex("^ +| +$|( ) +"), "$1");
     } while (!regex_match(virkne, regex("^[a-zA-ZāčģēīķļņšūžĀČĢĒĪĶĻŅŠŪŽ]+$")));
     return virkne;
 }
 
-int main()
-{
+int main() {
     int izvele;
     vector<string> darbibuSaraksts = {"1 - Login", "2 - Register", "3 - Aizvērt"};
 
-    do
-    {
+    do {
         cout << "Izvēlies darbību: " << endl;
-        for (const auto &darbiba : darbibuSaraksts)
-        {
+        for (const auto &darbiba : darbibuSaraksts) {
             cout << darbiba << endl;
         }
-        while (true)
-        {
+        while (true) {
             cout << "Ievadi izvēli (ciparu): ";
-            if (cin >> izvele)
-            {
+            if (cin >> izvele) {
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 break;
-            }
-            else
-            {
+            } else {
                 cout << "Lūdzu, ievadi veselu skaitli!" << endl;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
         }
-        switch (izvele)
-        {
-        case 1:
-        {
-
+        switch (izvele) {
+        case 1: {
             User tagadejais = Login();
-            if (tagadejais.LoggedIn)
-            {
-                if (tagadejais.loma == 's')
-                {
-                    cout << "tu esi speletajs" << endl;
-                    /////////
-                    srand(time(0));
-                    ifstream file("Dictionary.json");
-                    if (!file.is_open())
-                    {
-                        cerr << "Could not open Dictionary.json" << endl;
-                        continue;
-                    }
-                    json data;
-                    file >> data;
-                    file.close();
-
-                    char playAgain;
-                    do
-                    {
-                        Game game(data);
-                        string input;
-
-                        cout << "Choose word by category or by difficulty (cat or diff): ";
-                        cin >> input;
-
-                        try
-                        {
-                            if (input == "cat")
-                            {
-                                cout << "Available categories:\n";
-                                for (auto &[name, _] : data.items())
-                                    cout << "- " << name << endl;
-                                cout << "- random\n";
-                                cout << "Enter category: ";
-                                cin >> input;
-                                game.chooseCategory(input);
-                            }
-                            else if (input == "diff")
-                            {
-                                cout << "Choose difficulty (easy, medium, hard): ";
-                                cin >> input;
-                                game.chooseByDifficulty(input);
-                            }
-                            else
-                            {
-                                cout << "Invalid option." << endl;
-                                continue;
-                            }
-
-                            game.play();
-                        }
-                        catch (exception &e)
-                        {
-                            cout << "Error: " << e.what() << endl;
-                            continue;
-                        }
-                        cout << "Do you want to play again? (y/n): ";
-                        cin >> playAgain;
-
-                    } while (tolower(playAgain) == 'y');
-                    cout << "DEBUG: User: " << tagadejais.lietotajvards
-                         << ", LoggedIn: " << (tagadejais.LoggedIn ? "true" : "false") << endl;
-
-                    // SPELETAJAM
+            if (tagadejais.isLoggedIn()) {
+                if (tagadejais.getLoma() == 's') {
+                    Speletajs sp(tagadejais.getLietotajvards(), tagadejais.getLoma(), true);
+                    sp.execute();
+                } else {
+                    Redaktors red(tagadejais.getLietotajvards(), tagadejais.getLoma(), true);
+                    red.execute();
                 }
-                else // if (tagadejais.loma == 'r')
-                {   
-                    cout << "Tu esi redaktors" << endl;
-                    int redaktorsIzvele;
-                do
-                {
-                    cout << "Izvēlies darbību: " << endl;
-                    cout << "1 - Rediģēt Vārdnīcu" << endl;
-                    cout << "2 - skatīt sarakstu/logu??" << endl;
-                    cout << "3 - cita izvēle" << endl;
-                    cout << "4 - Aizvērt" << endl;
-                    
-                        
-                    while (true)
-                    {
-                        cout << "Ievadi izvēli (ciparu): ";
-                        if (cin >> redaktorsIzvele)
-                        {
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        else
-                        {
-                            cout << "Lūdzu, ievadi veselu skaitli!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                        }
-                    }
-                    switch (redaktorsIzvele)
-                    {
-                    case 1:
-                    {
-                        redaktoraVardMenu();
-                        break;
-                    }
-                    case 2:
-                    {
-                        cout << "Not made yet?" << endl;
-                        // pievienot tlk
-                        break;
-                    }
-                    case 3:
-                    {
-                        cout << "Not made yet" << endl;
-                        // varbut velko
-                        break;
-                    }
-                    case 4:
-                    {
-                        cout << "Izvēle beigt!" << endl;
-                        break;
-                    }
-                    default:
-                    {
-                        cout << "Izvēlieties no dotajām izvēlēm!" << endl;
-                        break;
-                    }
-                    }
-                } while (redaktorsIzvele != 4);
-                }
-            }
-            else
-            {
+            } else {
                 cout << "Pieteikšanās neizdevās!" << endl;
             }
-
             break;
         }
         case 2:
-        {
             Register();
-            cout << "Apsveicam, pieregistrejies!" << endl;
             break;
-        }
         case 3:
-        {
             cout << "Programma aizveras!" << endl;
             break;
-        }
         default:
-        {
             cout << "Izvēlieties no dotajā izvēlēm!" << endl;
             break;
         }
-        }
     } while (izvele != 3);
-
     return 0;
 }

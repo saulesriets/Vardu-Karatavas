@@ -1,0 +1,4 @@
+dans | buttermilk | Lives: 50 | Time: 4s | Score: 580
+dans | date | Lives: 50 | Time: 3s | Score: 525
+dans | fox | Lives: 50 | Time: 2s | Score: 520
+dans | cream | Lives: 50 | Time: 3s | Score: 535

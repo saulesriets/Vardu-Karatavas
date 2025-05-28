@@ -25,12 +25,15 @@ public:
     void chooseCategory(const std::string &userInput);
     void chooseByDifficulty(const std::string &level);
     void play();
-
+    void saglabatZurnalu(const std::string& username);
     // funkcijas lai varētu padot rezultātus rangu tabulām
     int getRemainingLives() const;
     size_t getWordLength() const;
     int getTimeBonus() const;
     double getFinalScore() const;
+
+    bool getWinStatus() const;
+    int getScore() const;
 
 private:
     void displayDashes();
