@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
+#include <fstream>
 #include "json.hpp"  // šis vajadzīgs lai jsons strādātu
 #include "Game.h"
 
@@ -196,3 +197,29 @@ void Game::displayDashesWithGuesses()
         }
         return true;
     }
+
+//tabulai pagaidu
+bool Game::getWinStatus() const {
+    return wordGuessed;
+}
+
+int Game::getScore() const {
+
+    return static_cast<int>(finalScore);
+}
+
+void Game::saglabatZurnalu(const std::string& username) {
+    std::ofstream outFile("Zurnals.txt", std::ios::app);
+    if (!outFile.is_open()) {
+        std::cerr << "Nevar atvērt Zurnals.txt!" << std::endl;
+        return;
+    }
+
+    int timeInSeconds = std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime).count();
+
+    outFile << username << " | "
+            << currentWord << " | "
+            << "Lives: " << remainingLives << " | "
+            << "Time: " << timeInSeconds << "s | "
+            << "Score: " << finalScore << std::endl;
+}
