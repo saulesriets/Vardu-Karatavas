@@ -1,6 +1,6 @@
 #include "redactor.h"
 #include "user.h"
-#include "speletaju_rezultati.hpp"
+#include "speletaju_rezultati.h"
 #include <iostream>
 #include <fstream>
 #include <limits>
