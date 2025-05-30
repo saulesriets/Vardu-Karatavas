@@ -1,4 +1,4 @@
-#include "speletaju_rezultati.hpp"
+#include "speletaju_rezultati.h"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
@@ -57,7 +57,7 @@ void paraditRezultatus(const std::vector<SpeletajuRezultati>& rezultati) {
         return a.punktiKopa > b.punktiKopa;
     });
 
-    std::cout << "===== Rangu Tabula =====" << std::endl;
+    std::cout << "/n Rangu Tabula /n" << std::endl;
     for (const auto& s : sakartoti) {
         std::cout << s.lietotajvards << " - Uzvaras: " << s.uzvaras
                   << ", Zaudējumi: " << s.zaudejumi
