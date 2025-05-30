@@ -26,4 +26,4 @@ std::vector<SpeletajuRezultati> nolasitRezultatus(const std::string& fails);
 void atjaunotRezultatu(std::vector<SpeletajuRezultati>& rezultati, const std::string& lietotajvards, bool uzvareja, int ieguutiePunkti);
 void paraditRezultatus(const std::vector<SpeletajuRezultati>& rezultati);
 
-#endif // SPELETAJU_REZULTATI_HPP
+#endif // SPELETAJU_REZULTATI_H
