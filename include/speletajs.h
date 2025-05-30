@@ -2,7 +2,7 @@
 #include "json.hpp"
 #include "Game.h"
 #include "user.h"
-#include "speletaju_rezultati.hpp"
+#include "speletaju_rezultati.h"
 #include <string>
 
 class Speletajs : public User {
