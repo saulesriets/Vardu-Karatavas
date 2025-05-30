@@ -1,5 +1,5 @@
-#ifndef SPELETAJU_REZULTATI_HPP
-#define SPELETAJU_REZULTATI_HPP
+#ifndef SPELETAJU_REZULTATI_H
+#define SPELETAJU_REZULTATI_H
 
 #include <string>
 #include <vector>
